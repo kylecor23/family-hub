@@ -1,18 +1,29 @@
 import React, { useState } from "react";
+import axios from "axios"; // Import axios for making HTTP requests
 
 const SignUpPage = () => {
-	const [username, setUsername] = useState(""); // Corrected to setUsername
-	const [password, setPassword] = useState(""); // Corrected to setPassword
-	const [confirmPassword, setConfirmPassword] = useState(""); // Added confirmPassword state
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
+	const handleSubmit = async (e) => {
+		e.preventDefault(); // Prevent the default form submission
+
 		if (password !== confirmPassword) {
 			console.log("Passwords do not match");
-		} else {
-			// Add logic to send the data to the server for registration
-			console.log("Username:", username);
-			console.log("Password:", password);
+			return;
+		}
+
+		try {
+			// Send POST request to the backend API to register the user
+			const response = await axios.post("http://localhost:5000/api/register", {
+				username: username,
+				password: password,
+			});
+
+			console.log("User registered successfully:", response.data);
+		} catch (error) {
+			console.error("Error registering user:", error);
 		}
 	};
 
@@ -24,28 +35,24 @@ const SignUpPage = () => {
 				<input
 					type="text"
 					value={username}
-					onChange={(e) => setUsername(e.target.value)} // Corrected to setUsername
-					className="submit-field"
+					onChange={(e) => setUsername(e.target.value)}
 					required
 				/>
 				<h2>Password</h2>
 				<input
 					type="password"
 					value={password}
-					onChange={(e) => setPassword(e.target.value)} // Corrected to setPassword
-					className="submit-field"
+					onChange={(e) => setPassword(e.target.value)}
 					required
 				/>
 				<h2>Confirm Password</h2>
 				<input
 					type="password"
 					value={confirmPassword}
-					onChange={(e) => setConfirmPassword(e.target.value)} // Added onChange for confirmPassword
-					className="submit-field"
+					onChange={(e) => setConfirmPassword(e.target.value)}
 					required
 				/>
-				<br />
-				<button className="submit-button">Submit</button>
+				<button type="submit">Submit</button>
 			</form>
 		</div>
 	);

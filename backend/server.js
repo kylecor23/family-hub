@@ -2,6 +2,7 @@ require("dotenv").config(); // Only need this once
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
+const authRoutes = require("./api/auth"); // Import the auth routes
 
 // MongoDB connection string from the .env file
 const MONGO_URI = process.env.MONGO_URI;
@@ -19,6 +20,12 @@ const connectDB = async () => {
 };
 
 connectDB();
+
+// Middleware to parse incoming JSON requests
+app.use(express.json()); // This is crucial for handling POST requests with JSON data
+
+// Use the authentication routes (e.g., for /api/register)
+app.use("/api", authRoutes);
 
 // Define a route for the root URL
 app.get("/", (req, res) => {
