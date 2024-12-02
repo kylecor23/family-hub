@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import axios for making HTTP requests
+import { useNavigate } from "react-router-dom"; // Use `useNavigate` for programmatic navigation
 
 const SignUpPage = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const [message, setMessage] = useState(""); // For displaying messages
+
+	const navigate = useNavigate(); // Get the navigate function to redirect
 
 	const handleSubmit = async (e) => {
 		e.preventDefault(); // Prevent the default form submission
 
 		if (password !== confirmPassword) {
-			console.log("Passwords do not match");
+			setMessage("Passwords do not match");
 			return;
 		}
 
@@ -20,11 +24,22 @@ const SignUpPage = () => {
 				username: username,
 				password: password,
 			});
+			setMessage("User registered successfully!"); // Show success message
 
-			console.log("User registered successfully:", response.data);
+			// Delay the redirection to allow user to see the success message
+			setTimeout(() => {
+				navigate("/login"); // Redirect to login page after 2 seconds
+			}, 2000); // 2-second delay before redirecting
 		} catch (error) {
-			console.error("Error registering user:", error);
+			setMessage(
+				"Error registering user: " + error.response?.data?.message ||
+					error.message
+			);
 		}
+	};
+
+	const handleGoToLogin = () => {
+		navigate("/login"); // Navigate to login page when button is clicked
 	};
 
 	return (
@@ -54,6 +69,9 @@ const SignUpPage = () => {
 				/>
 				<button type="submit">Submit</button>
 			</form>
+			{/* Button to navigate to the Login page */}
+			<button onClick={handleGoToLogin}>Log In</button>
+			{message && <p>{message}</p>} {/* Display success or error message */}
 		</div>
 	);
 };

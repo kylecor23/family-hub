@@ -2,10 +2,14 @@ require("dotenv").config(); // Only need this once
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const authRoutes = require("./api/auth"); // Import the auth routes
 
 // MongoDB connection string from the .env file
 const MONGO_URI = process.env.MONGO_URI;
+
+// Enable CORS for all routes and origins (you can specify allowed origins later for security)
+app.use(cors({ origin: "http://localhost:3000" }));
 
 // MongoDB connection
 const connectDB = async () => {

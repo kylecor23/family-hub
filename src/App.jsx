@@ -9,7 +9,7 @@ function App() {
 		<Router>
 			<Routes>
 				{/* Defining routes */}
-				<Route path="/" element={<LoginPage />} />{" "}
+				<Route path="/login" element={<LoginPage />} />{" "}
 				{/* Default route for login */}
 				<Route path="/signup" element={<SignUpPage />} />{" "}
 				{/* Route for sign-up */}

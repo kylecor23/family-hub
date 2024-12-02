@@ -32,4 +32,33 @@ router.post("/register", async (req, res) => {
 	}
 });
 
+router.post("/login", async (req, res) => {
+	const { username, password } = req.body;
+
+	try {
+		// Find user by username
+		const user = await User.findOne({ username });
+		if (!user) {
+			return res.status(400).json({ message: "Invalid credentials" });
+		}
+
+		// Compare the provided password with the stored hashed password
+		const isMatch = await bcrypt.compare(password, user.password);
+		if (!isMatch) {
+			return res.status(400).json({ message: "Invalid credentials" });
+		}
+
+		// Generate JWT token if credentials match
+		const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+			expiresIn: "1h",
+		});
+
+		// Send the token in the response
+		res.json({ message: "Login successful", token });
+	} catch (error) {
+		console.error("Error logging in user:", error);
+		res.status(500).json({ message: "Server error" });
+	}
+});
+
 module.exports = router;
