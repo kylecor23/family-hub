@@ -9,7 +9,7 @@ const authRoutes = require("./api/auth"); // Import the auth routes
 const MONGO_URI = process.env.MONGO_URI;
 
 // Enable CORS for all routes and origins (you can specify allowed origins later for security)
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "http://localhost:5173" }));
 
 // MongoDB connection
 const connectDB = async () => {
