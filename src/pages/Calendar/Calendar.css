@@ -1,0 +1,93 @@
+/* General Reset and Global Styles */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: Arial, sans-serif;
+}
+
+body {
+	background-color: #f7ede2;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+/* Calendar grid container */
+.calendar-grid {
+	display: grid;
+	grid-template-columns: repeat(
+		7,
+		1fr
+	); /* 7 columns for the days of the week */
+	grid-template-rows: repeat(5, 1fr); /* Adjust for 5 rows (weeks) */
+	grid-gap: 10px;
+	width: 90vw; /* Make sure it fills the width */
+	max-width: 100%;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+/* Style for each day in the calendar */
+.calendar-day {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 80px;
+	font-size: 20px;
+	background-color: #f4f4f4;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect when clicking/tapping a day */
+.calendar-day:hover {
+	background-color: #ddd;
+	transform: scale(1.05);
+}
+
+/* Highlight the current day */
+.calendar-day.today {
+	background-color: #4caf50;
+	color: white;
+	font-weight: bold;
+}
+
+/* Navigation buttons for next/previous month */
+.navigation-buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin: 20px 0;
+}
+
+.navigation-buttons button {
+	background-color: transparent;
+	color: black;
+	font-size: 18px;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.navigation-buttons button:hover {
+	background-color: #45a049;
+}
+
+/* For mobile, adjust layout */
+@media (max-width: 768px) {
+	.calendar-grid {
+		grid-template-columns: repeat(7, 1fr); /* Keep 7 columns */
+		grid-template-rows: repeat(6, auto); /* Increase the rows to fit all days */
+	}
+
+	.calendar-day {
+		height: 60px; /* Smaller buttons on mobile */
+		font-size: 14px;
+	}
+}
