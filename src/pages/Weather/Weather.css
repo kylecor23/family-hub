@@ -1,0 +1,30 @@
+.weather-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #f7f7f7;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	width: 80vh;
+	height: 80vh;
+	margin: auto;
+}
+
+.weather-container h2 {
+	font-size: 2rem;
+	margin-bottom: 10px;
+}
+
+.weather-container p {
+	font-size: 1rem;
+	margin: 5px 0;
+}
+
+.weather-container .fa-sun,
+.weather-container .fa-cloud,
+.weather-container .fa-cloud-rain,
+.weather-container .fa-snowflake {
+	margin-bottom: 15px;
+	color: #ffcc00; /* Default color for the icons */
+}

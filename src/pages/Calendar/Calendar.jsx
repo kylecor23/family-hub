@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import {
 	faChevronLeft,
 	faChevronRight,
+	faHouseChimney,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Calendar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 const Calendar = () => {
 	const [currentMonth, setCurrentMonth] = useState(new Date());
 	const [daysInMonth, setDaysInMonth] = useState([]);
@@ -57,9 +59,9 @@ const Calendar = () => {
 	const monthName = currentMonth.toLocaleString("default", { month: "long" });
 
 	return (
-		<div>
-			<h1>Calendar</h1>
+		<div className="calendar-container">
 			{/* Navigation buttons */}
+
 			<div className="navigation-buttons">
 				<button onClick={goToPreviousMonth}>
 					<FontAwesomeIcon icon={faChevronLeft} />
@@ -76,7 +78,7 @@ const Calendar = () => {
 			<div className="calendar-grid">
 				{/* Weekday headers */}
 				{["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-					<div key={index} className="calendar-day header">
+					<div key={index} className="calendar-day">
 						{day}
 					</div>
 				))}

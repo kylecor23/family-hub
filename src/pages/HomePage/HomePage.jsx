@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 const HomePage = () => {
 	const navigate = useNavigate();
 	const handleGoToCalendar = () => navigate("/calendar");
+	const handleGoToWeather = () => navigate("/weather");
 
 	return (
 		<div className="grid-container">
@@ -24,7 +25,7 @@ const HomePage = () => {
 				</button>
 			</div>
 			<div className="weather">
-				<button className="HomeButton">
+				<button className="HomeButton" onClick={handleGoToWeather}>
 					<FontAwesomeIcon icon={faSun} />
 					Weather
 				</button>

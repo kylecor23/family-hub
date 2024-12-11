@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate for programmatic navigation
 import axios from "axios";
+import "./auth.css";
 
 const LoginPage = () => {
 	const [username, setUsername] = useState(""); // Corrected to setUsername

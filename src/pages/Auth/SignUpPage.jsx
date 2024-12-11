@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import axios for making HTTP requests
 import { useNavigate } from "react-router-dom"; // Use `useNavigate` for programmatic navigation
-
+import "./auth.css";
 const SignUpPage = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");

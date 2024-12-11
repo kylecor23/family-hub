@@ -10,8 +10,22 @@ body {
 	background-color: #f7ede2;
 	display: flex;
 	justify-content: center;
+	align-items: flex-start; /* Align items at the top */
+	height: 100vh; /* Full viewport height */
+	padding-top: 60px;
+}
+
+/* Calendar container */
+.calendar-container {
+	width: 100%;
+	height: 90vh; /* Full height of the screen */
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start; /* Align content to the top */
 	align-items: center;
-	height: 100vh;
+	box-sizing: border-box;
+	overflow: hidden; /* Prevent overflow beyond the calendar */
+	flex-grow: 1;
 }
 
 /* Calendar grid container */
@@ -20,13 +34,17 @@ body {
 	grid-template-columns: repeat(
 		7,
 		1fr
-	); /* 7 columns for the days of the week */
-	grid-template-rows: repeat(5, 1fr); /* Adjust for 5 rows (weeks) */
+	); /* 7 columns for each day of the week */
+	grid-template-rows: repeat(
+		6,
+		minmax(60px, 1fr)
+	); /* Adjust for 6 rows of dynamic size */
 	grid-gap: 10px;
-	width: 90vw; /* Make sure it fills the width */
-	max-width: 100%;
+	width: 90vw; /* Take up 90% of the viewport width */
 	padding: 10px;
 	box-sizing: border-box;
+	overflow-y: auto; /* Allow vertical scroll if the content overflows */
+	height: 100%; /* Ensure it takes up 100% of the parent container height */
 }
 
 /* Style for each day in the calendar */
@@ -34,7 +52,6 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 80px;
 	font-size: 20px;
 	background-color: #f4f4f4;
 	border-radius: 8px;
@@ -62,6 +79,7 @@ body {
 	flex-direction: row;
 	justify-content: space-between;
 	margin: 20px 0;
+	width: 80%;
 }
 
 .navigation-buttons button {
@@ -82,12 +100,27 @@ body {
 /* For mobile, adjust layout */
 @media (max-width: 768px) {
 	.calendar-grid {
-		grid-template-columns: repeat(7, 1fr); /* Keep 7 columns */
-		grid-template-rows: repeat(6, auto); /* Increase the rows to fit all days */
+		grid-template-columns: repeat(
+			7,
+			1fr
+		); /* Keep 7 columns for each day of the week */
+		grid-template-rows: repeat(
+			6,
+			minmax(60px, 1fr)
+		); /* Allow dynamic row heights */
+		padding: 5px; /* Reduce padding for mobile */
 	}
 
 	.calendar-day {
-		height: 60px; /* Smaller buttons on mobile */
-		font-size: 14px;
+		font-size: 14px; /* Smaller font size */
+	}
+
+	.navigation-buttons {
+		width: 90%;
+	}
+
+	.navigation-buttons button {
+		font-size: 16px;
+		padding: 8px 15px;
 	}
 }
