@@ -1,5 +1,4 @@
-const jwt = require("jsonwebtoken"); // Add this line
-
+const jwt = require("jsonwebtoken"); // Add this line for JWT functionality
 const express = require("express");
 const bcrypt = require("bcryptjs"); // For hashing passwords
 const User = require("../models/User"); // Assuming you have a User model in models/User.js
@@ -34,33 +33,34 @@ router.post("/register", async (req, res) => {
 	}
 });
 
+// Login route
 router.post("/login", async (req, res) => {
 	const { username, password } = req.body;
 
 	try {
-		// Find user by username
 		const user = await User.findOne({ username });
 		if (!user) {
 			return res.status(400).json({ message: "Invalid credentials" });
 		}
-		// Debugging: Log the entered password and the stored hashed password
-		console.log("Entered password:", password);
-		console.log("Stored hashed password:", user.password);
-		// Compare the provided password with the stored hashed password
+
 		const isMatch = await bcrypt.compare(password, user.password);
-		// Debugging: Log the result of the password comparison
-		console.log("Password match status:", isMatch);
 		if (!isMatch) {
 			return res.status(400).json({ message: "Invalid credentials" });
 		}
 
-		// Generate JWT token if credentials match
 		const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
 			expiresIn: "1h",
 		});
 
-		// Send the token in the response
-		res.json({ message: "Login successful", token });
+		res.json({
+			message: "Login successful",
+			token,
+			user: {
+				_id: user._id,
+				username: user.username,
+				hasFamilyProfile: user.hasFamilyProfile,
+			},
+		});
 	} catch (error) {
 		console.error("Error logging in user:", error);
 		res.status(500).json({ message: "Server error" });

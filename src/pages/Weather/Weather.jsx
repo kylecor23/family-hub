@@ -111,7 +111,6 @@ const Weather = () => {
 		const daily = forecastData.list;
 
 		for (let i = 8; i < daily.length; i += 8) {
-			// Skip the first index to avoid today
 			const dayData = daily.slice(i, i + 8);
 			const temps = dayData.map((hour) => hour.main.temp);
 			const highTemp = Math.round(Math.max(...temps));
@@ -143,9 +142,24 @@ const Weather = () => {
 		setSelectedDay(null); // Reset selected day to show the 5-day forecast again
 	};
 
-	// Format Hourly Data (Rounds temperature to nearest whole number and formats time)
-	const getHourlyForecast = (hourlyData) => {
-		return hourlyData.map((hour) => {
+	// Filter hourly data for the selected day (show only hours from 00:00 to 23:59 of that day)
+	const filterHourlyForSelectedDay = () => {
+		if (!selectedDay) return [];
+
+		const selectedDayDate = new Date(selectedDay.date);
+
+		// Filter hourly data for that selected day only (00:00 to 23:59)
+		const filteredHourlyData = selectedDay.hourlyData.filter((hour) => {
+			const hourDate = new Date(hour.dt * 1000);
+			// Check if the hour's date matches the selected day's date (only show hours for the selected day)
+			return (
+				hourDate.getFullYear() === selectedDayDate.getFullYear() &&
+				hourDate.getMonth() === selectedDayDate.getMonth() &&
+				hourDate.getDate() === selectedDayDate.getDate()
+			);
+		});
+
+		return filteredHourlyData.map((hour) => {
 			return {
 				time: new Date(hour.dt * 1000).toLocaleTimeString([], {
 					hour: "2-digit", // Two digits for the hour (24-hour format)
@@ -208,9 +222,9 @@ const Weather = () => {
 					<h3>{selectedDay.dayName}</h3>
 					<p>{selectedDay.date}</p>
 
-					{/* Hourly Breakdown */}
+					{/* Hourly Breakdown for the Selected Day */}
 					<div className="hourly-breakdown">
-						{getHourlyForecast(selectedDay.hourlyData).map((hour, index) => (
+						{filterHourlyForSelectedDay().map((hour, index) => (
 							<div key={index} className="hourly-item">
 								<p>{hour.time}</p>
 								<FontAwesomeIcon

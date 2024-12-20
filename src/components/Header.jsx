@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import CurrentWeather from "./WeatherToday";
 import { faHouseChimney } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -37,7 +38,7 @@ const Header = () => {
 				<FontAwesomeIcon icon={faHouseChimney} />
 			</button>
 			<h1 className="headerTime">{time}</h1>
-			<h3>w</h3>
+			<CurrentWeather />
 		</div>
 	);
 };

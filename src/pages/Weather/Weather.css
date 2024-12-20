@@ -51,23 +51,6 @@
 	margin: 5px 0;
 }
 
-.daily-detail {
-	padding: 20px;
-	text-align: center;
-}
-
-.hourly-breakdown {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-around;
-}
-
-.hourly-item {
-	width: 50px;
-	text-align: center;
-	margin: 10px;
-}
-
 button {
 	margin-bottom: 20px;
 	padding: 10px;

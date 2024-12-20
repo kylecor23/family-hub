@@ -18,7 +18,7 @@
 	align-items: center;
 	width: 100%; /* Make the button span the full width of the grid cell */
 	height: 30vh; /* Make the button span the full height of the grid cell */
-	font-size: 18px; /* Make font bigger for readability */
+	font-size: 50px; /* Make font bigger for readability */
 	background-color: #84a59d; /* Green background */
 	border: none;
 	border-radius: 10px; /* Rounded corners */
@@ -28,7 +28,7 @@
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .HomeButton svg {
-	font-size: 50px; /* Increase the size of the icon */
+	font-size: 100px; /* Increase the size of the icon */
 	margin-bottom: 8px; /* Add space between icon and text */
 }
 /* Add hover and active states to provide feedback on interaction */

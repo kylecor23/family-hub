@@ -1,45 +1,37 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate for programmatic navigation
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./auth.css";
 
 const LoginPage = () => {
-	const [username, setUsername] = useState(""); // Corrected to setUsername
-	const [password, setPassword] = useState(""); // Corrected to setPassword
-	const [message, setMessage] = useState(""); // For displaying messages
-	const navigate = useNavigate(); // Initialize navigate for redirection
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [message, setMessage] = useState("");
+	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
-		e.preventDefault(); // Prevent the default form submission
-		console.log("Form submitted");
-
-		// Log the username and password (be cautious with logging passwords in production)
-		console.log("Username:", username);
-		console.log("Password:", password);
+		e.preventDefault();
 
 		try {
 			// Send login request
-			console.log("Sending request to /api/login with username and password");
 			const response = await axios.post("http://localhost:5000/api/login", {
 				username,
 				password,
 			});
 
-			// Log response data to ensure we get the token
-			console.log("Login successful, response:", response);
-
-			// Store the JWT token in localStorage
+			// Store user data and token in localStorage
+			localStorage.setItem("user", JSON.stringify(response.data.user));
 			localStorage.setItem("token", response.data.token);
 
-			// Set success message and navigate to the dashboard
-			setMessage("User logged in successfully!");
-			navigate("/dashboard"); // Redirect to dashboard after successful login
+			// Redirect based on `hasFamilyProfile` status
+			if (!response.data.user.hasFamilyProfile) {
+				navigate("/setup-family");
+			} else {
+				navigate("/dashboard");
+			}
 		} catch (error) {
-			// Log error to inspect
-			console.error("Error during login:", error);
-
-			// Show message to user
 			setMessage("Invalid credentials or error during login.");
+			console.error("Error during login:", error);
 		}
 	};
 
@@ -52,10 +44,7 @@ const LoginPage = () => {
 				<input
 					type="text"
 					value={username}
-					onChange={(e) => {
-						setUsername(e.target.value);
-						console.log("Username updated:", e.target.value); // Log username input
-					}}
+					onChange={(e) => setUsername(e.target.value)}
 					className="submit-field"
 					placeholder="Enter your username"
 					required
@@ -65,10 +54,7 @@ const LoginPage = () => {
 				<input
 					type="password"
 					value={password}
-					onChange={(e) => {
-						setPassword(e.target.value);
-						console.log("Password updated:", e.target.value); // Log password input
-					}}
+					onChange={(e) => setPassword(e.target.value)}
 					className="submit-field"
 					placeholder="Enter your password"
 					required
@@ -79,11 +65,7 @@ const LoginPage = () => {
 					Submit
 				</button>
 			</form>
-			{message && <p>{message}</p>} {/* Display success or error message */}
-			{/* Link to the Sign-Up page */}
-			<Link to="/signup">
-				<button className="sign-up-button">Sign Up</button>
-			</Link>
+			{message && <p>{message}</p>}
 		</div>
 	);
 };

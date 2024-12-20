@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const authRoutes = require("./api/auth"); // Import the auth routes
+const familyProfileRoutes = require("./api/FamilyProfile.js");
 
 // MongoDB connection string from the .env file
 const MONGO_URI = process.env.MONGO_URI;
@@ -30,6 +31,8 @@ app.use(express.json()); // This is crucial for handling POST requests with JSON
 
 // Use the authentication routes (e.g., for /api/register)
 app.use("/api", authRoutes);
+
+app.use("/api/familyProfile", familyProfileRoutes);
 
 // Define a route for the root URL
 app.get("/", (req, res) => {
