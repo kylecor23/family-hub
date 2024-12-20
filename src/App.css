@@ -13,7 +13,6 @@ body {
 	justify-content: flex-start; /* Ensure content starts from the top */
 	align-items: center;
 	min-height: 100vh; /* Allow full height for content */
-	overflow: hidden; /* Hide overflow to prevent scrolling */
 }
 
 .header {

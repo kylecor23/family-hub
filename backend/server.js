@@ -1,22 +1,30 @@
-require("dotenv").config(); // Only need this once
+require("dotenv").config(); // Load environment variables
 const mongoose = require("mongoose");
 const express = require("express");
-const app = express();
 const cors = require("cors");
-const authRoutes = require("./api/auth"); // Import the auth routes
-const familyProfileRoutes = require("./api/FamilyProfile.js");
+
+const app = express();
+
+// Import routes
+const authRoutes = require("./api/auth"); // Authentication routes
+const familyProfileRoutes = require("./api/FamilyProfile.js"); // Family Profile routes
+const geocodeRoutes = require("./api/geocode");
 
 // MongoDB connection string from the .env file
 const MONGO_URI = process.env.MONGO_URI;
 
-// Enable CORS for all routes and origins (you can specify allowed origins later for security)
-app.use(cors({ origin: "http://localhost:5173" }));
+// Middleware
+app.use(cors({ origin: ["http://localhost:5173", "http://localhost:5174"] })); // Allow multiple origins
+
+app.use(express.json()); // Parse incoming JSON requests
 
 // MongoDB connection
 const connectDB = async () => {
 	try {
-		// Connecting to MongoDB without deprecated options
-		await mongoose.connect(MONGO_URI);
+		await mongoose.connect(MONGO_URI, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+		});
 		console.log("MongoDB connected successfully!");
 	} catch (err) {
 		console.error("Error connecting to MongoDB:", err.message);
@@ -26,19 +34,16 @@ const connectDB = async () => {
 
 connectDB();
 
-// Middleware to parse incoming JSON requests
-app.use(express.json()); // This is crucial for handling POST requests with JSON data
+// Routes
+app.use("/api", authRoutes); // Authentication routes (e.g., /api/register)
+app.use("/api/familyProfile", familyProfileRoutes); // Family Profile routes
+app.use("/api", geocodeRoutes); // Geocoding routes
 
-// Use the authentication routes (e.g., for /api/register)
-app.use("/api", authRoutes);
-
-app.use("/api/familyProfile", familyProfileRoutes);
-
-// Define a route for the root URL
+// Root URL
 app.get("/", (req, res) => {
 	res.send("Backend is running!");
 });
 
-// Start your Express server
+// Start Express server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
