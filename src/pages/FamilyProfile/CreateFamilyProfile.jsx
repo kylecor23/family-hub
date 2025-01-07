@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 import "./SetUpFamilyProfile.css";
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
@@ -16,6 +17,8 @@ const SetUpFamilyProfile = () => {
 	const [familyMotto, setFamilyMotto] = useState("");
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
+
+	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -43,6 +46,7 @@ const SetUpFamilyProfile = () => {
 		const userId = decoded.userId;
 
 		try {
+			// Prepare FormData
 			const formData = new FormData();
 			formData.append("familyName", familyName);
 			formData.append(
@@ -55,11 +59,16 @@ const SetUpFamilyProfile = () => {
 			formData.append("familyMotto", familyMotto);
 			formData.append("userId", userId);
 
+			if (familyAvatar) {
+				formData.append("familyAvatar", familyAvatar); // Add file if selected
+			}
+
 			console.log(
 				"Submitting FormData:",
 				Object.fromEntries(formData.entries())
-			); // Debug log
+			);
 
+			// Send data to backend
 			const response = await axios.post(
 				`${backendUrl}/api/familyProfile/create-family-profile`,
 				formData,
@@ -68,12 +77,26 @@ const SetUpFamilyProfile = () => {
 				}
 			);
 
+			console.log("Backend Response:", response.data);
+
+			// Update localStorage and navigate
+			const updatedUserData = {
+				...JSON.parse(localStorage.getItem("user")),
+				hasFamilyProfile: true,
+			};
+			localStorage.setItem("user", JSON.stringify(updatedUserData));
+
 			setSuccess(response.data.message);
+
+			// Navigate to the next step
 			setTimeout(() => {
-				window.location.href = "/set-up-personal-profile";
+				navigate("/setup-user");
 			}, 2000);
 		} catch (error) {
-			console.error("Error creating family profile:", error);
+			console.error(
+				"Error creating family profile:",
+				error.response?.data || error.message
+			);
 			setError("Failed to create family profile. Please try again.");
 		}
 	};

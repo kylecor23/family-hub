@@ -8,6 +8,7 @@ import Calendar from "./pages/Calendar/Calendar";
 import Weather from "./pages/Weather/Weather";
 import Header from "./components/Header";
 import SetUpFamilyProfile from "./pages/FamilyProfile/CreateFamilyProfile";
+import InitialUserProfile from "./pages/UserProfile/InitialUserProfile";
 import "./App.css";
 
 function App() {
@@ -38,7 +39,8 @@ function App() {
 		if (
 			location.pathname === "/login" ||
 			location.pathname === "/signup" ||
-			location.pathname === "/setup-family"
+			location.pathname === "/setup-family" ||
+			location.pathname === "/setup-user"
 		) {
 			return null;
 		}
@@ -76,6 +78,8 @@ function App() {
 					}
 				/>
 				<Route path="/setup-family" element={<SetUpFamilyProfile />} />
+
+				<Route path="/setup-user" element={<InitialUserProfile />} />
 			</Routes>
 		</>
 	);

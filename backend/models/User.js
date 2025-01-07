@@ -18,6 +18,15 @@ const userSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "FamilyProfile", // Reference to the family profile
 	},
+	role: {
+		type: String,
+		enum: ["Admin", "User", "Child"], // Role-based permissions
+		default: "User", // Default to User unless specified
+	},
+	notificationPreferences: {
+		type: String,
+		default: "email", // Default notification preference
+	},
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -8,7 +8,8 @@ const app = express();
 // Import routes
 const authRoutes = require("./api/auth"); // Authentication routes
 const familyProfileRoutes = require("./api/FamilyProfile.js"); // Family Profile routes
-const geocodeRoutes = require("./api/geocode");
+const geocodeRoutes = require("./api/geocode"); // Geocoding routes
+const userProfileRoutes = require("./api/UserProfile"); // User Profile routes
 
 // MongoDB connection string from the .env file
 const MONGO_URI = process.env.MONGO_URI;
@@ -35,9 +36,10 @@ const connectDB = async () => {
 connectDB();
 
 // Routes
-app.use("/api", authRoutes); // Authentication routes (e.g., /api/register)
+app.use("/api/auth", authRoutes); // Authentication routes (e.g., /api/register)
 app.use("/api/familyProfile", familyProfileRoutes); // Family Profile routes
 app.use("/api", geocodeRoutes); // Geocoding routes
+app.use("/api/userProfile", userProfileRoutes); // User Profile routes
 
 // Root URL
 app.get("/", (req, res) => {
