@@ -11,13 +11,17 @@ const familyProfileSchema = new mongoose.Schema({
 				type: mongoose.Schema.Types.ObjectId,
 				ref: "User", // Reference to the User model
 			},
-			role: {
-				type: String, // "Dad", "Mom", "Child", etc.
-				required: true,
-			},
 		},
 	],
-	// Add any other fields you'd like to store for the family
+	location: {
+		type: String,
+	},
+	timeFormat: {
+		type: String,
+	},
+	familyMotto: {
+		type: String,
+	},
 });
 
 module.exports = mongoose.model("FamilyProfile", familyProfileSchema);

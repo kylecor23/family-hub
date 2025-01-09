@@ -14,10 +14,13 @@ const LoginPage = () => {
 
 		try {
 			// Send login request
-			const response = await axios.post("http://localhost:5000/api/login", {
-				username,
-				password,
-			});
+			const response = await axios.post(
+				"http://localhost:5000/api/auth/login",
+				{
+					username,
+					password,
+				}
+			);
 
 			// Store user data and token in localStorage
 			localStorage.setItem("user", JSON.stringify(response.data.user));

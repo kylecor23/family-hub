@@ -5,6 +5,8 @@ const FamilyProfile = require("../models/FamilyProfile");
 const router = express.Router();
 
 router.post("/create", async (req, res) => {
+	console.log("Incoming Request Body:", req.body); // Debug log for incoming request
+
 	const {
 		email,
 		password,
@@ -14,8 +16,13 @@ router.post("/create", async (req, res) => {
 		notificationPreferences,
 	} = req.body;
 
-	// Validate required fields
 	if (!email || !password || !displayName || !familyProfileId) {
+		console.error("Missing Required Fields:", {
+			email,
+			password,
+			displayName,
+			familyProfileId,
+		});
 		return res.status(400).json({ error: "Missing required fields" });
 	}
 
@@ -23,6 +30,7 @@ router.post("/create", async (req, res) => {
 		// Check if the family profile exists
 		const familyProfile = await FamilyProfile.findById(familyProfileId);
 		if (!familyProfile) {
+			console.error("Family Profile Not Found:", familyProfileId);
 			return res.status(404).json({ error: "Family profile not found" });
 		}
 
@@ -34,8 +42,8 @@ router.post("/create", async (req, res) => {
 			email,
 			password: hashedPassword,
 			displayName,
-			familyProfileId, // Link to the family profile
-			role: role || "Admin", // Default role for the initial user
+			familyProfileId,
+			role: role || "Admin", // Default to Admin if not specified
 			notificationPreferences: notificationPreferences || "email",
 		});
 

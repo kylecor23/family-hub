@@ -20,10 +20,13 @@ const SignUpPage = () => {
 
 		try {
 			// Send POST request to the backend API to register the user
-			const response = await axios.post("http://localhost:5000/api/register", {
-				username: username,
-				password: password,
-			});
+			const response = await axios.post(
+				"http://localhost:5000/api/auth/register", // Correct endpoint
+				{
+					username: username,
+					password: password,
+				}
+			);
 			setMessage("User registered successfully!"); // Show success message
 
 			// Delay the redirection to allow user to see the success message

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Correct import for jwtDecode
 import { useNavigate } from "react-router-dom";
 import "./SetUpFamilyProfile.css";
 
@@ -13,7 +13,6 @@ const SetUpFamilyProfile = () => {
 	const [province, setProvince] = useState("");
 	const [country, setCountry] = useState("");
 	const [timeFormat, setTimeFormat] = useState("24h");
-	const [familyAvatar, setFamilyAvatar] = useState(null);
 	const [familyMotto, setFamilyMotto] = useState("");
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
@@ -25,73 +24,42 @@ const SetUpFamilyProfile = () => {
 		setError("");
 		setSuccess("");
 
-		console.log("Form Data:", {
-			familyName,
-			locationType,
-			city,
-			province,
-			country,
-			timeFormat,
-			familyAvatar,
-			familyMotto,
-		});
-
-		const token = localStorage.getItem("token");
-		if (!token) {
-			setError("User not authenticated. Please log in again.");
-			return;
-		}
-
-		const decoded = jwtDecode(token);
-		const userId = decoded.userId;
-
 		try {
-			// Prepare FormData
-			const formData = new FormData();
-			formData.append("familyName", familyName);
-			formData.append(
-				"location",
-				locationType === "Set Manually"
-					? `${city}, ${province}, ${country}`
-					: "GPS"
-			);
-			formData.append("timeFormat", timeFormat);
-			formData.append("familyMotto", familyMotto);
-			formData.append("userId", userId);
-
-			if (familyAvatar) {
-				formData.append("familyAvatar", familyAvatar); // Add file if selected
+			const token = localStorage.getItem("token");
+			if (!token) {
+				setError("User not authenticated. Please log in again.");
+				return;
 			}
 
-			console.log(
-				"Submitting FormData:",
-				Object.fromEntries(formData.entries())
-			);
+			// Decode the JWT to extract userId
+			const decoded = jwtDecode(token);
+			const userId = decoded.userId;
 
-			// Send data to backend
+			const payload = {
+				familyName,
+				userId,
+				location:
+					locationType === "Set Manually"
+						? `${city}, ${province}, ${country}`
+						: "GPS",
+				timeFormat,
+				familyMotto,
+			};
+
+			console.log("Payload Sent to Backend:", payload);
+
 			const response = await axios.post(
 				`${backendUrl}/api/familyProfile/create-family-profile`,
-				formData,
-				{
-					headers: { "Content-Type": "multipart/form-data" },
-				}
+				payload
 			);
 
-			console.log("Backend Response:", response.data);
-
-			// Update localStorage and navigate
-			const updatedUserData = {
-				...JSON.parse(localStorage.getItem("user")),
-				hasFamilyProfile: true,
-			};
-			localStorage.setItem("user", JSON.stringify(updatedUserData));
-
+			const { familyProfileId } = response.data;
+			console.log(
+				`Navigating to /setup-user?familyProfileId=${familyProfileId}`
+			);
 			setSuccess(response.data.message);
 
-			// Navigate to the next step
-			setTimeout(() => {
-				navigate("/setup-user");
-			}, 2000);
+			navigate(`/setup-user?familyProfileId=${familyProfileId}`);
 		} catch (error) {
 			console.error(
 				"Error creating family profile:",
@@ -171,14 +139,6 @@ const SetUpFamilyProfile = () => {
 						type="text"
 						value={familyMotto}
 						onChange={(e) => setFamilyMotto(e.target.value)}
-					/>
-				</div>
-				<div className="form-group">
-					<label>Family Avatar (Optional):</label>
-					<input
-						type="file"
-						accept="image/*"
-						onChange={(e) => setFamilyAvatar(e.target.files[0])}
 					/>
 				</div>
 				<button type="submit" className="submit-button">
